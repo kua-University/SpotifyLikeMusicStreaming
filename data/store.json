@@ -1,0 +1,168 @@
+{
+  "user": {
+    "id": "user-1",
+    "name": "Merkeb",
+    "plan": "Premium",
+    "favorites": [
+      "song-1",
+      "song-4",
+      "song-7",
+      "song-5"
+    ]
+  },
+  "songs": [
+    {
+      "id": "song-1",
+      "title": "Tizita Night",
+      "artist": "Teddy Afro",
+      "album": "Ethiopia Sessions",
+      "genre": "Ethio-jazz",
+      "mood": "Reflective",
+      "duration": "4:12",
+      "playCount": 25
+    },
+    {
+      "id": "song-2",
+      "title": "Addis Ababa Lights",
+      "artist": "Betty G",
+      "album": "City Pulse",
+      "genre": "Afro-pop",
+      "mood": "Chill",
+      "duration": "3:48",
+      "playCount": 19
+    },
+    {
+      "id": "song-3",
+      "title": "Gurage Groove",
+      "artist": "Jano Band",
+      "album": "Live in Addis",
+      "genre": "Fusion",
+      "mood": "Energetic",
+      "duration": "4:01",
+      "playCount": 15
+    },
+    {
+      "id": "song-4",
+      "title": "Blue Nile Sunrise",
+      "artist": "Aster Aweke",
+      "album": "Timeless Voices",
+      "genre": "Ballad",
+      "mood": "Calm",
+      "duration": "5:02",
+      "playCount": 27
+    },
+    {
+      "id": "song-5",
+      "title": "Meskel Square Motion",
+      "artist": "Rophnan",
+      "album": "Urban Fire",
+      "genre": "Electronic",
+      "mood": "Energetic",
+      "duration": "3:35",
+      "playCount": 34
+    },
+    {
+      "id": "song-6",
+      "title": "Harar Moon",
+      "artist": "Mahmoud Ahmed",
+      "album": "Golden Echoes",
+      "genre": "Traditional",
+      "mood": "Reflective",
+      "duration": "4:44",
+      "playCount": 21
+    },
+    {
+      "id": "song-7",
+      "title": "Konjo Playlist",
+      "artist": "Gigi",
+      "album": "Roots and Rhythm",
+      "genre": "World",
+      "mood": "Warm",
+      "duration": "3:57",
+      "playCount": 17
+    },
+    {
+      "id": "song-8",
+      "title": "Bole After Rain",
+      "artist": "Yohana",
+      "album": "Late Drive",
+      "genre": "Soul",
+      "mood": "Late Night",
+      "duration": "4:09",
+      "playCount": 13
+    }
+  ],
+  "playlists": [
+    {
+      "id": "pl-1001",
+      "name": "My Favorites",
+      "description": "Songs I replay the most on quiet evenings.",
+      "theme": "Warm and familiar",
+      "songs": [
+        "song-1",
+        "song-4",
+        "song-7"
+      ]
+    },
+    {
+      "id": "pl-1002",
+      "name": "Merkeb's playlist",
+      "description": "Current rotation for coding and late-night listening.",
+      "theme": "Focus mix",
+      "songs": [
+        "song-2",
+        "song-5",
+        "song-8"
+      ]
+    },
+    {
+      "id": "pl-1003",
+      "name": "Habesha Roadtrip",
+      "description": "Uplifting Ethiopian tracks for long drives.",
+      "theme": "Road energy",
+      "songs": [
+        "song-3",
+        "song-5",
+        "song-6"
+      ]
+    }
+  ],
+  "activity": [
+    {
+      "id": "ev-3001",
+      "type": "song_played",
+      "songId": "song-5",
+      "playedAt": "2026-05-05T07:20:00.000Z"
+    },
+    {
+      "id": "ev-3002",
+      "type": "song_played",
+      "songId": "song-1",
+      "playedAt": "2026-05-05T07:31:00.000Z"
+    },
+    {
+      "id": "ev-3003",
+      "type": "favorite_added",
+      "songId": "song-7",
+      "playedAt": "2026-05-05T07:41:00.000Z"
+    },
+    {
+      "id": "ev-1777988976027",
+      "type": "song_played",
+      "songId": "song-1",
+      "playedAt": "2026-05-05T13:49:36.027Z"
+    },
+    {
+      "id": "ev-1777988994180",
+      "type": "song_played",
+      "songId": "song-5",
+      "playedAt": "2026-05-05T13:49:54.180Z"
+    },
+    {
+      "id": "ev-1777988997105",
+      "type": "favorite_added",
+      "songId": "song-5",
+      "playedAt": "2026-05-05T13:49:57.105Z"
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+:root {
+  --bg: #f3ecde;
+  --paper: rgba(255, 250, 242, 0.92);
+  --ink: #1d1a17;
+  --accent: #0f6b57;
+  --accent-dark: #0a4b3d;
+  --line: #d5c7b0;
+  --soft: #6d6558;
+  --gold: #d8a84b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(circle at top left, rgba(216, 168, 75, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(15, 107, 87, 0.16), transparent 34%),
+    linear-gradient(180deg, #fcf7ee, var(--bg));
+  color: var(--ink);
+}
+
+.login-body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.login-shell {
+  width: min(100%, 520px);
+  padding: 24px;
+}
+
+.login-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(29, 26, 23, 0.12);
+  padding: 28px;
+}
+
+.demo-box {
+  display: grid;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+  background: #fffdf8;
+  margin-bottom: 16px;
+}
+
+.app {
+  width: min(1160px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 36px 0 64px;
+}
+
+.hero {
+  padding: 28px 24px 14px;
+}
+
+.topbar {
+  align-items: flex-start;
+}
+
+.topbar-actions {
+  display: grid;
+  justify-items: end;
+  gap: 10px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  color: var(--accent-dark);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  margin-bottom: 12px;
+}
+
+.summary {
+  max-width: 760px;
+  color: var(--soft);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.stats,
+.grid {
+  display: grid;
+  gap: 18px;
+}
+
+.stats {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin-top: 24px;
+}
+
+.stat-card,
+.panel {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: 0 18px 40px rgba(29, 26, 23, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.stat-card {
+  padding: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.stat-card strong {
+  font-size: 1.3rem;
+}
+
+.stat-card span {
+  color: var(--soft);
+}
+
+.hero-grid {
+  margin-bottom: 18px;
+}
+
+.grid {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.panel {
+  padding: 20px;
+}
+
+.panel-header,
+.toolbar,
+.meta-row,
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.panel-header {
+  justify-content: space-between;
+}
+
+.toolbar {
+  justify-content: flex-end;
+}
+
+.song-list,
+.playlist-list,
+.activity-list {
+  display: grid;
+  gap: 12px;
+}
+
+.song-card,
+.playlist-card,
+.activity-card {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+  background: #fffdf8;
+}
+
+.compact {
+  grid-template-columns: 1fr;
+}
+
+.compact-card .actions {
+  margin-top: 10px;
+}
+
+.pill {
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(15, 107, 87, 0.12);
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+}
+
+.pill.soft {
+  background: rgba(216, 168, 75, 0.16);
+  color: #7b5618;
+}
+
+.actions {
+  margin-top: 12px;
+}
+
+button,
+select,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #e8f2ef;
+  color: var(--accent-dark);
+}
+
+select,
+input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: white;
+}
+
+#searchInput {
+  min-width: min(420px, 100%);
+}
+
+.playlist-form {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.status {
+  color: var(--accent-dark);
+  font-weight: bold;
+}
+
+small,
+.playlist-card p,
+.activity-card p {
+  color: var(--soft);
+}
+
+ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+@media (max-width: 760px) {
+  .app {
+    width: min(100% - 20px, 1160px);
+    padding-top: 24px;
+  }
+
+  .panel-header,
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #searchInput {
+    min-width: 100%;
+  }
+}

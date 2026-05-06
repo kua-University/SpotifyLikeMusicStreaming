@@ -1,0 +1,9 @@
+{
+  "name": "spotify-like-prototype",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal prototype for the Spotify-Like Music Streaming System",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
