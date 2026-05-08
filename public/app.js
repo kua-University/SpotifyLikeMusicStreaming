@@ -13,6 +13,13 @@ const recentEl = document.getElementById("recent");
 const recommendationsEl = document.getElementById("recommendations");
 const logoutBtn = document.getElementById("logoutBtn");
 const welcomeText = document.getElementById("welcomeText");
+const audioPlayer = document.getElementById("audioPlayer");
+const playerTitle = document.getElementById("playerTitle");
+const playerArtist = document.getElementById("playerArtist");
+const playPauseBtn = document.getElementById("playPauseBtn");
+const nextBtn = document.getElementById("nextBtn");
+const prevBtn = document.getElementById("prevBtn");
+const queueListEl = document.getElementById("queueList");
 
 const sessionRaw = localStorage.getItem("spotify_like_session");
 if (!sessionRaw) {
@@ -32,6 +39,9 @@ let playlists = [];
 let home = null;
 let recommendations = [];
 let searchTerm = "";
+let queue = [];
+let currentSong = null;
+let currentQueueIndex = -1;
 
 async function api(url, options = {}) {
   const response = await fetch(url, {
@@ -55,7 +65,7 @@ function formatActivity(entry) {
     favorite_added: "Added to favorites",
     favorite_removed: "Removed from favorites"
   };
-  return `${labels[entry.type] || entry.type} • ${new Date(entry.playedAt).toLocaleString()}`;
+  return `${labels[entry.type] || entry.type} - ${new Date(entry.playedAt).toLocaleString()}`;
 }
 
 function filteredSongs() {
@@ -71,6 +81,10 @@ function filteredSongs() {
   );
 }
 
+function findSong(songId) {
+  return songs.find((song) => song.id === songId);
+}
+
 function songCard(song, compact = false) {
   const favoriteIds = new Set(home?.user?.favorites || []);
   const isFavorite = favoriteIds.has(song.id);
@@ -83,10 +97,11 @@ function songCard(song, compact = false) {
         </div>
         <h3>${song.title}</h3>
         <p>${song.artist} - ${song.album}</p>
-        <small>${song.duration} • ${song.playCount} plays</small>
+        <small>${song.duration} - ${song.playCount} plays</small>
       </div>
       <div class="actions">
         <button data-play="${song.id}">Play</button>
+        <button class="secondary" data-queue="${song.id}">Queue</button>
         <button class="${isFavorite ? "secondary" : ""}" data-favorite="${song.id}">
           ${isFavorite ? "Unfavorite" : "Favorite"}
         </button>
@@ -99,6 +114,78 @@ function songCard(song, compact = false) {
       </div>
     </article>
   `;
+}
+
+function renderQueue() {
+  if (!queueListEl) {
+    return;
+  }
+
+  queueListEl.innerHTML = queue.length
+    ? queue.map((song, index) => `
+      <button class="${index === currentQueueIndex ? "" : "secondary"}" data-queue-play="${index}" type="button">
+        ${song.title} - ${song.artist}
+      </button>
+    `).join("")
+    : "<span>No queued songs yet.</span>";
+}
+
+function updatePlayerState() {
+  if (!currentSong) {
+    playerTitle.textContent = "Choose a track";
+    playerArtist.textContent = "Your queue is ready.";
+    playPauseBtn.textContent = "Play";
+    renderQueue();
+    return;
+  }
+
+  playerTitle.textContent = currentSong.title;
+  playerArtist.textContent = `${currentSong.artist} - ${currentSong.album}`;
+  playPauseBtn.textContent = audioPlayer.paused ? "Play" : "Pause";
+  renderQueue();
+}
+
+async function startSong(song, queueIndex = -1) {
+  if (!song) {
+    return;
+  }
+
+  const payload = await api(`/api/play/${song.id}`, { method: "POST" });
+  currentSong = payload.song;
+  currentQueueIndex = queueIndex;
+  audioPlayer.src = payload.stream.mediaUrl;
+  await audioPlayer.play();
+  statusEl.textContent = payload.message;
+  await loadAll();
+  updatePlayerState();
+}
+
+function enqueueSong(song) {
+  if (!song) {
+    return;
+  }
+
+  queue.push(song);
+  statusEl.textContent = `${song.title} added to queue.`;
+  renderQueue();
+}
+
+async function playNext() {
+  if (!queue.length) {
+    return;
+  }
+
+  const nextIndex = currentQueueIndex + 1 < queue.length ? currentQueueIndex + 1 : 0;
+  await startSong(queue[nextIndex], nextIndex);
+}
+
+async function playPrevious() {
+  if (!queue.length) {
+    return;
+  }
+
+  const previousIndex = currentQueueIndex > 0 ? currentQueueIndex - 1 : queue.length - 1;
+  await startSong(queue[previousIndex], previousIndex);
 }
 
 function renderStats() {
@@ -116,7 +203,7 @@ function renderStats() {
     </article>
     <article class="stat-card">
       <strong>${home.stats.songs}</strong>
-      <span>Ethiopian tracks</span>
+      <span>Playable tracks</span>
     </article>
     <article class="stat-card">
       <strong>${home.stats.playlists}</strong>
@@ -159,7 +246,7 @@ function renderPlaylists() {
 
 function renderActivity(activity) {
   activityEl.innerHTML = activity.length
-    ? activity.map((entry) => `<p>${formatActivity(entry)} • ${entry.songId}</p>`).join("")
+    ? activity.map((entry) => `<p>${formatActivity(entry)} - ${entry.songId}</p>`).join("")
     : "<p>No activity yet.</p>";
 }
 
@@ -182,7 +269,7 @@ function renderHomePanels() {
         <span class="pill">${playlist.theme || "Featured"}</span>
       </div>
       <h3>${playlist.name}</h3>
-      <p>${playlist.description || "Curated for the prototype."}</p>
+      <p>${playlist.description || "Curated for the site."}</p>
       <small>${playlist.songs.length} songs</small>
     </article>
   `).join("");
@@ -203,37 +290,40 @@ function renderHomePanels() {
 }
 
 async function loadAll() {
-  const [songData, playlistData, activityData, homeData, recommendationData] = await Promise.all([
-    api("/api/songs"),
-    api("/api/playlists"),
-    api("/api/activity"),
-    api("/api/home"),
-    api("/api/recommendations")
-  ]);
+  const webHome = await api("/api/bff/web-home");
 
-  songs = songData;
-  playlists = playlistData;
-  home = homeData;
-  recommendations = recommendationData;
+  songs = webHome.songs;
+  playlists = webHome.playlists;
+  home = webHome.home;
+  recommendations = webHome.recommendations;
 
   renderStats();
   renderSongs();
   renderPlaylists();
-  renderActivity(activityData);
+  renderActivity(webHome.activity);
   renderHomePanels();
+  updatePlayerState();
 }
 
 async function handleCardClick(event) {
   const playButton = event.target.closest("[data-play]");
+  const queueButton = event.target.closest("[data-queue]");
   const favoriteButton = event.target.closest("[data-favorite]");
-  if (!playButton && !favoriteButton) {
+  if (!playButton && !queueButton && !favoriteButton) {
     return;
   }
 
   try {
     if (playButton) {
-      const payload = await api(`/api/play/${playButton.dataset.play}`, { method: "POST" });
-      statusEl.textContent = payload.message;
+      const song = findSong(playButton.dataset.play);
+      if (song && !queue.some((queuedSong) => queuedSong.id === song.id)) {
+        queue.push(song);
+      }
+      await startSong(song, queue.findIndex((queuedSong) => queuedSong.id === song.id));
+      return;
+    }
+    if (queueButton) {
+      enqueueSong(findSong(queueButton.dataset.queue));
     }
     if (favoriteButton) {
       const payload = await api(`/api/favorites/${favoriteButton.dataset.favorite}`, { method: "POST" });
@@ -292,6 +382,56 @@ searchInput.addEventListener("input", (event) => {
 });
 
 refreshBtn.addEventListener("click", loadAll);
+
+playPauseBtn.addEventListener("click", async () => {
+  try {
+    if (!audioPlayer.src && queue.length) {
+      await startSong(queue[0], 0);
+      return;
+    }
+
+    if (audioPlayer.paused) {
+      await audioPlayer.play();
+    } else {
+      audioPlayer.pause();
+    }
+    updatePlayerState();
+  } catch (error) {
+    statusEl.textContent = error.message;
+  }
+});
+
+nextBtn.addEventListener("click", () => {
+  playNext().catch((error) => {
+    statusEl.textContent = error.message;
+  });
+});
+
+prevBtn.addEventListener("click", () => {
+  playPrevious().catch((error) => {
+    statusEl.textContent = error.message;
+  });
+});
+
+queueListEl.addEventListener("click", (event) => {
+  const queueButton = event.target.closest("[data-queue-play]");
+  if (!queueButton) {
+    return;
+  }
+
+  const index = Number.parseInt(queueButton.dataset.queuePlay, 10);
+  startSong(queue[index], index).catch((error) => {
+    statusEl.textContent = error.message;
+  });
+});
+
+audioPlayer.addEventListener("play", updatePlayerState);
+audioPlayer.addEventListener("pause", updatePlayerState);
+audioPlayer.addEventListener("ended", () => {
+  playNext().catch((error) => {
+    statusEl.textContent = error.message;
+  });
+});
 
 logoutBtn.addEventListener("click", () => {
   localStorage.removeItem("spotify_like_session");

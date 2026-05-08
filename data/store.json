@@ -18,7 +18,9 @@
       "album": "Ethiopia Sessions",
       "genre": "Ethio-jazz",
       "mood": "Reflective",
-      "duration": "4:12",
+      "duration": "0:16",
+      "audioFile": "song-1.wav",
+      "mimeType": "audio/wav",
       "playCount": 25
     },
     {
@@ -28,7 +30,9 @@
       "album": "City Pulse",
       "genre": "Afro-pop",
       "mood": "Chill",
-      "duration": "3:48",
+      "duration": "0:16",
+      "audioFile": "song-2.wav",
+      "mimeType": "audio/wav",
       "playCount": 19
     },
     {
@@ -38,7 +42,9 @@
       "album": "Live in Addis",
       "genre": "Fusion",
       "mood": "Energetic",
-      "duration": "4:01",
+      "duration": "0:16",
+      "audioFile": "song-3.wav",
+      "mimeType": "audio/wav",
       "playCount": 15
     },
     {
@@ -48,7 +54,9 @@
       "album": "Timeless Voices",
       "genre": "Ballad",
       "mood": "Calm",
-      "duration": "5:02",
+      "duration": "0:16",
+      "audioFile": "song-4.wav",
+      "mimeType": "audio/wav",
       "playCount": 27
     },
     {
@@ -58,7 +66,9 @@
       "album": "Urban Fire",
       "genre": "Electronic",
       "mood": "Energetic",
-      "duration": "3:35",
+      "duration": "0:16",
+      "audioFile": "song-5.wav",
+      "mimeType": "audio/wav",
       "playCount": 34
     },
     {
@@ -68,7 +78,9 @@
       "album": "Golden Echoes",
       "genre": "Traditional",
       "mood": "Reflective",
-      "duration": "4:44",
+      "duration": "0:16",
+      "audioFile": "song-6.wav",
+      "mimeType": "audio/wav",
       "playCount": 21
     },
     {
@@ -78,7 +90,9 @@
       "album": "Roots and Rhythm",
       "genre": "World",
       "mood": "Warm",
-      "duration": "3:57",
+      "duration": "0:16",
+      "audioFile": "song-7.wav",
+      "mimeType": "audio/wav",
       "playCount": 17
     },
     {
@@ -88,7 +102,9 @@
       "album": "Late Drive",
       "genre": "Soul",
       "mood": "Late Night",
-      "duration": "4:09",
+      "duration": "0:16",
+      "audioFile": "song-8.wav",
+      "mimeType": "audio/wav",
       "playCount": 13
     }
   ],

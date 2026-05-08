@@ -4,6 +4,11 @@
   "private": true,
   "description": "Minimal prototype for the Spotify-Like Music Streaming System",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "check": "node --check server.js && node --check src/gateway/apiGateway.js && node --check src/container.js",
+    "generate-audio": "node scripts/generate-demo-audio.js"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

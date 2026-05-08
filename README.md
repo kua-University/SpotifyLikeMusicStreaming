@@ -1,354 +1,147 @@
-# Spotify-Like Prototype
+# Spotify-Like Music Streaming System
 
-This prototype is a working demonstration for the `Spotify-Like Music Streaming System` project.
+This is a working full-stack music streaming site. It uses a browser frontend, a Node.js backend API, seekable local audio streams, and JSON persistence, while organizing the backend around the architectural and design patterns from `num5.doc`.
 
-It still proves interaction between at least three modules:
+## What The Site Does
 
-- Module 1: Frontend user interface
-- Module 2: Backend API
-- Module 3: Persistent local data storage
+- login with a demo account
+- Ethiopian music catalog browsing and search
+- playlist creation and song assignment
+- favorites
+- real browser audio playback through a streaming endpoint
+- recent activity
+- personalized recommendations
+- playable demo tracks with seekable audio streams
+- Dockerized local deployment
 
-It now feels more realistic by using Ethiopian music data and a richer streaming-style experience.
-
-## 1. What This Prototype Does
-
-The prototype allows a user to:
-
-- browse an Ethiopian music catalog
-- search songs, artists, albums, genres, and moods
-- create playlists
-- add songs to playlists
-- mark songs as favorites
-- view featured playlists
-- view simple recommendations
-- simulate playing a song
-- view recently played and activity history
-
-## 2. Modules in the Prototype
-
-This prototype satisfies the instructor requirement because it clearly contains these 3 interacting modules:
-
-1. Frontend Module
-2. Backend Module
-3. Data Storage Module
-
-### Frontend Module
-
-Files:
-
-- [public/index.html](C:\Users\HP\OneDrive\Desktop\SADproject\prototype\public\index.html)
-- [public/app.js](C:\Users\HP\OneDrive\Desktop\SADproject\prototype\public\app.js)
-- [public/styles.css](C:\Users\HP\OneDrive\Desktop\SADproject\prototype\public\styles.css)
-
-Responsibilities:
-
-- displays songs, playlists, favorites, and recommendations
-- lets the user search the catalog
-- lets the user create playlists
-- lets the user favorite songs
-- lets the user simulate playback
-- sends requests to the backend API
-
-### Backend Module
-
-File:
-
-- [server.js](C:\Users\HP\OneDrive\Desktop\SADproject\prototype\server.js)
-
-Responsibilities:
-
-- serves the frontend files
-- exposes HTTP API endpoints
-- reads and writes application data
-- updates play counts
-- updates favorite state
-- records playback activity
-- prepares home dashboard and recommendation data
-
-### Data Storage Module
-
-File:
-
-- [data/store.json](C:\Users\HP\OneDrive\Desktop\SADproject\prototype\data\store.json)
-
-Responsibilities:
-
-- stores Ethiopian song metadata
-- stores playlists
-- stores playback activity
-- stores favorite-song state for the demo user
-
-This acts as the persistence layer for the prototype.
-
-## 3. Technology Used
-
-- Frontend: HTML, CSS, JavaScript
-- Backend: Node.js built-in `http` module
-- Storage: local JSON file
-
-No external npm packages are required.
-
-## 4. Folder Structure
+## Demo Login
 
 ```text
-prototype/
-  package.json
-  server.js
-  README.md
-  data/
-    store.json
-  public/
-    index.html
-    app.js
-    styles.css
+Username: merkeb
+Password: 1234
 ```
 
-## 5. Requirements
+## Architecture And Design Patterns Applied
 
-Before running the prototype, make sure you have:
+- API Gateway Pattern: `src/gateway/apiGateway.js` is the single API entry point and routes requests to internal services.
+- Microservices Pattern: the backend is split into domain services for auth, catalog, playlist, playback, recommendation, analytics, and architecture metadata.
+- Event-Driven Architecture: `src/events/eventBus.js` publishes events such as `song_played` and `playlist_updated`.
+- Backend for Frontend: `GET /api/bff/web-home` returns one web-shaped payload for the browser.
+- CQRS Pattern: read endpoints call query services, while POST endpoints call command services that mutate `data/store.json`.
+- Circuit Breaker Pattern: recommendation calls in the BFF are wrapped by `src/infrastructure/circuitBreaker.js`.
+- Repository Pattern: `src/repositories/jsonStoreRepository.js` isolates data access.
+- Service Layer Pattern: business rules live in `src/services`.
+- Observer Pattern: analytics and recommendation consumers react independently to published events.
+- Factory Pattern: `src/factories` creates recommendation strategies and stream handlers from environment configuration.
 
-- Node.js installed
+## Project Structure
 
-## 6. How to Run the Prototype
+```text
+prototype 1/
+  Dockerfile
+  docker-compose.yml
+  package.json
+  server.js
+  data/
+    store.json
+  media/
+    song-1.wav
+    ...
+  public/
+    app.js
+    home.html
+    index.html
+    login.html
+    login.js
+    styles.css
+  src/
+    config/
+    events/
+    factories/
+    gateway/
+    http/
+    infrastructure/
+    repositories/
+    services/
+```
 
-Open a terminal and run:
+If the generated demo audio files are missing, recreate them with:
 
 ```powershell
-cd C:\Users\HP\OneDrive\Desktop\SADproject\prototype
+npm run generate-audio
+```
+
+## Run Locally
+
+```powershell
 npm start
 ```
 
-After the server starts, open this in your browser:
+Open:
 
 ```text
 http://localhost:3000
 ```
 
-If it starts correctly, you should see:
-
-```text
-Prototype running at http://localhost:3000
-```
-
-## 7. How to Use the Prototype
-
-### Browse the Catalog
-
-When the page opens, the frontend loads songs, playlists, favorites, dashboard stats, and recommendations from the backend.
-
-### Search
-
-Use the search box to filter Ethiopian songs by title, artist, album, genre, or mood.
-
-### Create a Playlist
-
-1. Enter a playlist name
-2. Click `Create Playlist`
-3. The frontend sends the request to the backend
-4. The backend writes the new playlist into `store.json`
-
-### Add a Song to a Playlist
-
-1. Find a song in the catalog
-2. Use the dropdown next to the song
-3. Choose a playlist
-4. The backend updates stored playlist data
-
-### Favorite a Song
-
-1. Click `Favorite` on a song card
-2. The backend updates the demo user's favorite list
-3. The favorites panel refreshes immediately
-
-### Play a Song
-
-1. Click `Play`
-2. The frontend sends a playback request to the backend
-3. The backend increases play count
-4. The backend writes a playback event to `store.json`
-5. The frontend refreshes recent activity and recommendation context
-
-## 8. API Endpoints
-
-### `GET /api/songs`
-
-Returns the Ethiopian song catalog.
-
-Optional query parameters:
-
-- `q` for search
-- `genre` for genre filtering
-
-### `GET /api/home`
-
-Returns dashboard data such as:
-
-- demo user info
-- stats
-- featured playlists
-- favorite songs
-- trending songs
-- recently played entries
-
-### `GET /api/recommendations`
-
-Returns simple recommendation results based on the demo user's favorites.
-
-### `GET /api/playlists`
-
-Returns all playlists.
-
-### `POST /api/playlists`
-
-Creates a new playlist.
-
-Example request body:
-
-```json
-{
-  "name": "Late Night Addis"
-}
-```
-
-### `POST /api/playlists/:id/songs`
-
-Adds a song to a playlist.
-
-Example request body:
-
-```json
-{
-  "songId": "song-1"
-}
-```
-
-### `POST /api/play/:id`
-
-Simulates playing a song.
-
-What it does:
-
-- increases play count
-- records a playback event
-
-### `POST /api/favorites/:id`
-
-Toggles whether a song is in the demo user's favorites list.
-
-### `GET /api/activity`
-
-Returns recorded activity events.
-
-## 9. What Proves the Course Requirement
-
-This prototype satisfies the course requirement in these ways:
-
-### Interaction Between at Least Three Modules
-
-- frontend UI sends requests
-- backend API processes requests
-- data storage saves and returns data
-
-The three modules interact like this:
-
-1. The frontend sends user actions or data requests.
-2. The backend receives the API request and applies application logic.
-3. The backend reads from or writes to `store.json`.
-4. The backend sends updated results back to the frontend.
-
-### API Communication
-
-The frontend uses endpoints such as:
-
-- `/api/songs`
-- `/api/home`
-- `/api/recommendations`
-- `/api/playlists`
-- `/api/play/:id`
-- `/api/favorites/:id`
-- `/api/activity`
-
-### Data Storage and Retrieval
-
-The backend reads from and writes to [store.json](C:\Users\HP\OneDrive\Desktop\SADproject\prototype\data\store.json).
-
-### User Interaction
-
-The user can:
-
-- browse songs
-- search the catalog
-- create playlists
-- add songs to playlists
-- favorite songs
-- play songs
-- view recommendations
-- view playback history
-
-## 10. Important Notes
-
-- This is still a prototype, not a full production system.
-- Audio playback is simulated through API interaction and activity logging.
-- It uses local JSON storage for simplicity instead of PostgreSQL, Cassandra, Redis, or Kafka.
-- The catalog has been localized with Ethiopian artists and titles so the prototype better matches the project theme.
-
-## 11. Suggested Demo Script for Presentation
-
-You can present the prototype like this:
-
-1. Start the server with `npm start`
-2. Open `http://localhost:3000`
-3. Show the Ethiopian catalog
-4. Show featured playlists and recommendations
-5. Search for a song or artist
-6. Create a new playlist
-7. Add a song to the playlist
-8. Favorite a song
-9. Click `Play` on a song
-10. Show that play count and activity update
-11. Explain that this demonstrates frontend, backend, and storage interaction
-
-## 12. Possible Future Improvements
-
-If you want to extend it later, you could add:
-
-- real audio file playback
-- a database such as PostgreSQL
-- user login and sessions
-- artist upload workflows
-- recommendation ranking logic
-- Docker support
-- separate deployable microservices
-
-## 13. Troubleshooting
-
-### Port 3000 Already In Use
-
-If port `3000` is busy, run:
+If port 3000 is busy:
 
 ```powershell
 $env:PORT=3001
 npm start
 ```
 
-Then open:
+## Run With Docker
 
-```text
-http://localhost:3001
+Build and start with Docker Compose:
+
+```powershell
+docker compose up --build
 ```
 
-### Page Does Not Load
+Open:
 
-Check:
+```text
+http://localhost:3000
+```
 
-- Node.js is installed
-- you are inside the `prototype` folder
-- the server started without errors
+Stop the container:
 
-### Data Does Not Update
+```powershell
+docker compose down
+```
 
-Check whether [store.json](C:\Users\HP\OneDrive\Desktop\SADproject\prototype\data\store.json) is being updated after actions.
+The compose file mounts `./data` into the container so site data changes persist on your machine.
 
-## 14. Summary
+## API Endpoints
 
-This prototype is a simple but richer demonstration of the Spotify-Like Music Streaming System. It shows a more realistic localized interface, a stronger Ethiopian music identity, and a clear interaction flow between user interface, backend API, and persistent data storage.
+- `GET /api/health`
+- `GET /api/stream/:id`
+- `POST /api/login`
+- `GET /api/bff/web-home`
+- `GET /api/architecture`
+- `GET /api/songs`
+- `GET /api/home`
+- `GET /api/recommendations`
+- `GET /api/playlists`
+- `POST /api/playlists`
+- `POST /api/playlists/:id/songs`
+- `POST /api/play/:id`
+- `POST /api/favorites/:id`
+- `GET /api/activity`
+
+## Environment Options
+
+- `PORT`: server port, default `3000`
+- `DATA_FILE`: alternate JSON data file path
+- `STREAM_PROVIDER`: `cdn` or `local`
+- `RECOMMENDATION_STRATEGY`: `genre` or `trending`
+
+## Course Requirement Fit
+
+The site shows interaction between at least three modules:
+
+1. The frontend sends browser actions to the backend.
+2. The API gateway routes requests to service-layer modules.
+3. The repository persists and retrieves data from `data/store.json`.
+
+It also maps the final architecture brief to a runnable site without exposing those patterns as interface content. PostgreSQL, Cassandra, Redis, Kafka, object storage, and CDN remain represented as production architecture targets while this local version uses lightweight equivalents.

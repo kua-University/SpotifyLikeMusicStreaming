@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home | Spotify-Like Prototype</title>
+    <title>Home | Merkeb Music</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
@@ -11,8 +11,8 @@
       <section class="hero">
         <div class="panel-header topbar">
           <div>
-            <p class="eyebrow">Working Prototype</p>
-            <h1>Spotify-Like Music Streaming System</h1>
+            <p class="eyebrow">Music Streaming Site</p>
+            <h1>Merkeb Music</h1>
           </div>
           <div class="topbar-actions">
             <p id="welcomeText" class="status">Signed in</p>
@@ -20,9 +20,27 @@
           </div>
         </div>
         <p class="summary">
-          A localized streaming demo featuring Ethiopian music, personalized playlists, favorites, recommendations, and playback activity.
+          Stream Ethiopian-inspired tracks, build playlists, save favorites, and keep listening from the persistent player.
         </p>
         <div id="stats" class="stats"></div>
+      </section>
+
+      <section class="player-shell" aria-label="Music player">
+        <div class="player-now">
+          <span class="pill">Now Playing</span>
+          <strong id="playerTitle">Choose a track</strong>
+          <span id="playerArtist">Your queue is ready.</span>
+        </div>
+        <div class="player-controls">
+          <button id="prevBtn" class="secondary" type="button">Prev</button>
+          <button id="playPauseBtn" type="button">Play</button>
+          <button id="nextBtn" class="secondary" type="button">Next</button>
+        </div>
+        <audio id="audioPlayer" controls preload="metadata"></audio>
+        <div class="queue-panel">
+          <strong>Queue</strong>
+          <div id="queueList" class="queue-list"></div>
+        </div>
       </section>
 
       <section class="grid hero-grid">
@@ -68,7 +86,7 @@
           <div class="panel-header">
             <h2>Playback Activity</h2>
           </div>
-          <p id="status" class="status">Choose a song to simulate playback.</p>
+          <p id="status" class="status">Choose a song to start streaming.</p>
           <div id="activity" class="activity-list"></div>
         </div>
       </section>
