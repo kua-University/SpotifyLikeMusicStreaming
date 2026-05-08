@@ -214,18 +214,86 @@ h1 {
 
 .song-list,
 .playlist-list,
-.activity-list {
+.activity-list,
+.insight-grid {
   display: grid;
   gap: 12px;
 }
 
 .song-card,
 .playlist-card,
-.activity-card {
+.activity-card,
+.insight-card {
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 14px;
   background: #fffdf8;
+}
+
+.song-card {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: start;
+  gap: 14px;
+}
+
+.song-card .actions {
+  grid-column: 1 / -1;
+}
+
+.cover-art,
+.cover-hero {
+  display: block;
+  width: 100%;
+  border: 1px solid rgba(29, 26, 23, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 10px 22px rgba(29, 26, 23, 0.12);
+  object-fit: cover;
+  aspect-ratio: 1;
+}
+
+.cover-small {
+  width: 74px;
+}
+
+.spotlight-card {
+  display: grid;
+  grid-template-columns: minmax(132px, 180px) 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.cover-hero {
+  border-radius: 20px;
+}
+
+.insight-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.insight-card {
+  display: grid;
+  gap: 6px;
+}
+
+.insight-card strong {
+  font-size: 1.15rem;
+}
+
+.insight-card span {
+  color: var(--soft);
+  line-height: 1.45;
+}
+
+.insight-card.wide {
+  grid-column: 1 / -1;
+}
+
+.chip-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 0;
 }
 
 .compact {
@@ -324,6 +392,20 @@ ul {
   .player-shell {
     grid-template-columns: 1fr;
     position: static;
+  }
+
+  .spotlight-card,
+  .song-card {
+    grid-template-columns: 1fr;
+  }
+
+  .cover-small,
+  .cover-art {
+    width: min(180px, 100%);
+  }
+
+  .insight-grid {
+    grid-template-columns: 1fr;
   }
 
   #searchInput {

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Blue Nile Sunrise cover art">
+  <rect width="300" height="300" fill="#0b3954"/>
+  <circle cx="86" cy="82" r="48" fill="#ffca3a"/>
+  <path d="M0 176 C54 132 94 200 148 164 C204 126 242 174 300 120 L300 300 L0 300 Z" fill="#087e8b"/>
+  <path d="M0 224 C56 196 100 236 154 214 C214 188 250 222 300 196" fill="none" stroke="#bfd7ea" stroke-width="12"/>
+  <text x="28" y="268" fill="#ffffff" font-family="Arial" font-size="23" font-weight="700">Blue Nile Sunrise</text>
+</svg>

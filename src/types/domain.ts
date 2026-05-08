@@ -14,6 +14,9 @@ export interface Song {
   album: string;
   genre: string;
   mood: string;
+  year: number;
+  label: string;
+  coverArt: string;
   duration: string;
   audioFile: string;
   mimeType: string;

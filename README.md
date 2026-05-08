@@ -21,6 +21,8 @@ This is a working full-stack music streaming site. It uses a browser frontend, a
 - recent activity
 - personalized recommendations
 - playable demo tracks with seekable audio streams
+- album-style cover art and richer discovery sections
+- genre filtering, spotlight track, listening insights, and playlist playback
 - Dockerized local deployment
 
 ## Demo Login

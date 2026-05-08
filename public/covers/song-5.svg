@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Meskel Square Motion cover art">
+  <rect width="300" height="300" fill="#241623"/>
+  <polygon points="150,24 270,150 150,276 30,150" fill="#ffbe0b"/>
+  <polygon points="150,62 232,150 150,238 68,150" fill="#fb5607"/>
+  <polygon points="150,102 196,150 150,198 104,150" fill="#3a86ff"/>
+  <circle cx="150" cy="150" r="26" fill="#ffffff"/>
+  <text x="26" y="286" fill="#ffffff" font-family="Arial" font-size="22" font-weight="700">Meskel Motion</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Addis Ababa Lights cover art">
+  <rect width="300" height="300" fill="#14213d"/>
+  <rect x="28" y="110" width="34" height="132" fill="#fca311"/>
+  <rect x="82" y="70" width="42" height="172" fill="#2a9d8f"/>
+  <rect x="148" y="96" width="38" height="146" fill="#e76f51"/>
+  <rect x="210" y="52" width="48" height="190" fill="#f4f1de"/>
+  <circle cx="68" cy="50" r="12" fill="#f4f1de"/>
+  <circle cx="250" cy="28" r="8" fill="#fca311"/>
+  <text x="28" y="272" fill="#f4f1de" font-family="Arial" font-size="25" font-weight="700">Addis Lights</text>
+</svg>

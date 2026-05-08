@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Bole After Rain cover art">
+  <rect width="300" height="300" fill="#253237"/>
+  <path d="M0 110 C60 74 110 134 168 98 C220 66 254 94 300 62 L300 300 L0 300 Z" fill="#5c6b73"/>
+  <path d="M0 178 C68 132 112 204 176 164 C226 132 254 154 300 126" fill="none" stroke="#c2dfe3" stroke-width="13"/>
+  <circle cx="76" cy="56" r="10" fill="#e0fbfc"/>
+  <circle cx="218" cy="94" r="7" fill="#e0fbfc"/>
+  <text x="30" y="266" fill="#e0fbfc" font-family="Arial" font-size="24" font-weight="700">Bole After Rain</text>
+</svg>

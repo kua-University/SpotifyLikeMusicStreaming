@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Harar Moon cover art">
+  <rect width="300" height="300" fill="#1b4332"/>
+  <circle cx="214" cy="72" r="50" fill="#fefae0"/>
+  <circle cx="232" cy="62" r="50" fill="#1b4332"/>
+  <path d="M34 198 L86 142 L138 198 L190 132 L266 198 Z" fill="#dda15e"/>
+  <path d="M42 232 H258" stroke="#fefae0" stroke-width="10" stroke-linecap="round"/>
+  <text x="34" y="270" fill="#fefae0" font-family="Arial" font-size="26" font-weight="700">Harar Moon</text>
+</svg>

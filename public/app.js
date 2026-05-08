@@ -11,6 +11,9 @@ const favoritesEl = document.getElementById("favorites");
 const featuredEl = document.getElementById("featured");
 const recentEl = document.getElementById("recent");
 const recommendationsEl = document.getElementById("recommendations");
+const spotlightEl = document.getElementById("spotlight");
+const insightsEl = document.getElementById("insights");
+const genreChipsEl = document.getElementById("genreChips");
 const logoutBtn = document.getElementById("logoutBtn");
 const welcomeText = document.getElementById("welcomeText");
 const audioPlayer = document.getElementById("audioPlayer");
@@ -39,6 +42,7 @@ let playlists = [];
 let home = null;
 let recommendations = [];
 let searchTerm = "";
+let selectedGenre = "";
 let queue = [];
 let currentSong = null;
 let currentQueueIndex = -1;
@@ -69,15 +73,13 @@ function formatActivity(entry) {
 }
 
 function filteredSongs() {
-  if (!searchTerm) {
-    return songs;
-  }
   const normalized = searchTerm.toLowerCase();
   return songs.filter((song) =>
-    [song.title, song.artist, song.album, song.genre, song.mood]
+    (!selectedGenre || song.genre === selectedGenre) &&
+    (!searchTerm || [song.title, song.artist, song.album, song.genre, song.mood]
       .join(" ")
       .toLowerCase()
-      .includes(normalized)
+      .includes(normalized))
   );
 }
 
@@ -90,6 +92,7 @@ function songCard(song, compact = false) {
   const isFavorite = favoriteIds.has(song.id);
   return `
     <article class="song-card ${compact ? "compact-card" : ""}">
+      <img class="cover-art ${compact ? "cover-small" : ""}" src="${song.coverArt}" alt="${song.title} cover art">
       <div>
         <div class="meta-row">
           <span class="pill">${song.genre}</span>
@@ -97,7 +100,7 @@ function songCard(song, compact = false) {
         </div>
         <h3>${song.title}</h3>
         <p>${song.artist} - ${song.album}</p>
-        <small>${song.duration} - ${song.playCount} plays</small>
+        <small>${song.year} - ${song.duration} - ${song.playCount} plays</small>
       </div>
       <div class="actions">
         <button data-play="${song.id}">Play</button>
@@ -216,6 +219,62 @@ function renderStats() {
   `;
 }
 
+function renderDiscovery() {
+  const spotlight = home?.spotlightSong;
+  if (spotlightEl && spotlight) {
+    spotlightEl.innerHTML = `
+      <article class="spotlight-card">
+        <img class="cover-hero" src="${spotlight.coverArt}" alt="${spotlight.title} cover art">
+        <div>
+          <span class="pill">${spotlight.genre}</span>
+          <h3>${spotlight.title}</h3>
+          <p>${spotlight.artist} - ${spotlight.album}</p>
+          <small>${spotlight.playCount} plays - ${spotlight.mood}</small>
+          <div class="actions">
+            <button data-play="${spotlight.id}">Play Spotlight</button>
+            <button class="secondary" data-queue="${spotlight.id}">Queue</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  if (insightsEl && home?.insights) {
+    insightsEl.innerHTML = `
+      <article class="insight-card">
+        <strong>${home.insights.totalPlays}</strong>
+        <span>Total plays</span>
+      </article>
+      <article class="insight-card">
+        <strong>${home.insights.mostPlayedGenre}</strong>
+        <span>Strongest genre</span>
+      </article>
+      <article class="insight-card">
+        <strong>${home.insights.mostPlayedMood}</strong>
+        <span>Dominant mood</span>
+      </article>
+      <article class="insight-card wide">
+        <strong>Top artists</strong>
+        <span>${home.insights.topArtists.map((item) => `${item.artist} (${item.plays})`).join(", ")}</span>
+      </article>
+    `;
+  }
+}
+
+function renderGenreChips() {
+  if (!genreChipsEl) {
+    return;
+  }
+
+  const genres = home?.genres || [];
+  genreChipsEl.innerHTML = `
+    <button class="${selectedGenre ? "secondary" : ""}" data-genre="" type="button">All</button>
+    ${genres.map((genre) => `
+      <button class="${selectedGenre === genre ? "" : "secondary"}" data-genre="${genre}" type="button">${genre}</button>
+    `).join("")}
+  `;
+}
+
 function renderSongs() {
   const result = filteredSongs();
   songsEl.innerHTML = result.length
@@ -232,6 +291,10 @@ function renderPlaylists() {
       </div>
       <h3>${playlist.name}</h3>
       <p>${playlist.description || "Personal collection."}</p>
+      <div class="actions">
+        <button data-play-playlist="${playlist.id}" type="button">Play Playlist</button>
+        <button class="secondary" data-queue-playlist="${playlist.id}" type="button">Queue Playlist</button>
+      </div>
       <ul>
         ${playlist.songs.length
           ? playlist.songs.map((songId) => {
@@ -271,6 +334,10 @@ function renderHomePanels() {
       <h3>${playlist.name}</h3>
       <p>${playlist.description || "Curated for the site."}</p>
       <small>${playlist.songs.length} songs</small>
+      <div class="actions">
+        <button data-play-playlist="${playlist.id}" type="button">Play</button>
+        <button class="secondary" data-queue-playlist="${playlist.id}" type="button">Queue</button>
+      </div>
     </article>
   `).join("");
 
@@ -298,6 +365,8 @@ async function loadAll() {
   recommendations = webHome.recommendations;
 
   renderStats();
+  renderDiscovery();
+  renderGenreChips();
   renderSongs();
   renderPlaylists();
   renderActivity(webHome.activity);
@@ -308,12 +377,32 @@ async function loadAll() {
 async function handleCardClick(event) {
   const playButton = event.target.closest("[data-play]");
   const queueButton = event.target.closest("[data-queue]");
+  const playPlaylistButton = event.target.closest("[data-play-playlist]");
+  const queuePlaylistButton = event.target.closest("[data-queue-playlist]");
   const favoriteButton = event.target.closest("[data-favorite]");
-  if (!playButton && !queueButton && !favoriteButton) {
+  if (!playButton && !queueButton && !playPlaylistButton && !queuePlaylistButton && !favoriteButton) {
     return;
   }
 
   try {
+    if (playPlaylistButton || queuePlaylistButton) {
+      const playlistId = (playPlaylistButton || queuePlaylistButton).dataset.playPlaylist ||
+        (playPlaylistButton || queuePlaylistButton).dataset.queuePlaylist;
+      const playlist = playlists.find((item) => item.id === playlistId);
+      const playlistSongs = (playlist?.songs || []).map(findSong).filter(Boolean);
+      playlistSongs.forEach((song) => {
+        if (!queue.some((queuedSong) => queuedSong.id === song.id)) {
+          queue.push(song);
+        }
+      });
+      renderQueue();
+      statusEl.textContent = `${playlist?.name || "Playlist"} added to queue.`;
+      if (playPlaylistButton && playlistSongs.length) {
+        await startSong(playlistSongs[0], queue.findIndex((song) => song.id === playlistSongs[0].id));
+      }
+      return;
+    }
+
     if (playButton) {
       const song = findSong(playButton.dataset.play);
       if (song && !queue.some((queuedSong) => queuedSong.id === song.id)) {
@@ -340,6 +429,9 @@ async function handleCardClick(event) {
 songsEl.addEventListener("click", handleCardClick);
 favoritesEl.addEventListener("click", handleCardClick);
 recommendationsEl.addEventListener("click", handleCardClick);
+featuredEl.addEventListener("click", handleCardClick);
+playlistsEl.addEventListener("click", handleCardClick);
+spotlightEl.addEventListener("click", handleCardClick);
 
 songsEl.addEventListener("change", async (event) => {
   const select = event.target.closest("[data-select-song]");
@@ -382,6 +474,17 @@ searchInput.addEventListener("input", (event) => {
 });
 
 refreshBtn.addEventListener("click", loadAll);
+
+genreChipsEl.addEventListener("click", (event) => {
+  const chip = event.target.closest("[data-genre]");
+  if (!chip) {
+    return;
+  }
+
+  selectedGenre = chip.dataset.genre;
+  renderGenreChips();
+  renderSongs();
+});
 
 playPauseBtn.addEventListener("click", async () => {
   try {

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Gurage Groove cover art">
+  <rect width="300" height="300" fill="#272640"/>
+  <circle cx="150" cy="150" r="112" fill="none" stroke="#ffbf69" stroke-width="18"/>
+  <circle cx="150" cy="150" r="68" fill="none" stroke="#4ecdc4" stroke-width="14"/>
+  <circle cx="150" cy="150" r="24" fill="#ff6b6b"/>
+  <path d="M48 228 C92 188 112 246 154 210 C198 170 226 218 260 178" fill="none" stroke="#fff8e8" stroke-width="9" stroke-linecap="round"/>
+  <text x="32" y="54" fill="#fff8e8" font-family="Arial" font-size="24" font-weight="700">Gurage Groove</text>
+</svg>

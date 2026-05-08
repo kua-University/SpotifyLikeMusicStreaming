@@ -26,6 +26,17 @@ class WebBffService {
       .slice()
       .sort((a, b) => b.playCount - a.playCount)
       .slice(0, 4);
+    const genres = Array.from(new Set(store.songs.map((song) => song.genre))).sort();
+    const moods = Array.from(new Set(store.songs.map((song) => song.mood))).sort();
+    const artistPlayMap = store.songs.reduce((totals, song) => {
+      totals.set(song.artist, (totals.get(song.artist) || 0) + song.playCount);
+      return totals;
+    }, new Map());
+    const topArtists = Array.from(artistPlayMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4)
+      .map(([artist, plays]) => ({ artist, plays }));
+    const totalPlays = store.songs.reduce((sum, song) => sum + song.playCount, 0);
 
     return {
       user: store.user,
@@ -37,8 +48,25 @@ class WebBffService {
       featuredPlaylists: store.playlists.slice(0, 3),
       favoriteSongs,
       trendingSongs,
-      recentlyPlayed
+      recentlyPlayed,
+      spotlightSong: trendingSongs[0],
+      genres,
+      moods,
+      insights: {
+        totalPlays,
+        topArtists,
+        mostPlayedGenre: this.mode(store.songs.map((song) => song.genre)),
+        mostPlayedMood: this.mode(store.songs.map((song) => song.mood))
+      }
     };
+  }
+
+  mode(values) {
+    const counts = values.reduce((totals, value) => {
+      totals.set(value, (totals.get(value) || 0) + 1);
+      return totals;
+    }, new Map());
+    return Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] || "Unknown";
   }
 
   async buildWebHome() {
