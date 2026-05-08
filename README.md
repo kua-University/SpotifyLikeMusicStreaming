@@ -1,5 +1,14 @@
 # Spotify-Like Music Streaming System
 
+![HTML5](https://img.shields.io/badge/HTML5-Frontend-e34f26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-Styling-1572b6?logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-App%20Logic-f7df1e?logo=javascript&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-Backend-339933?logo=node.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-Domain%20Types-3178c6?logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Schema-4169e1?logo=postgresql&logoColor=white)
+![Cassandra](https://img.shields.io/badge/Cassandra-Event%20History-1287b1?logo=apachecassandra&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ed?logo=docker&logoColor=white)
+
 This is a working full-stack music streaming site. It uses a browser frontend, a Node.js backend API, seekable local audio streams, and JSON persistence, while organizing the backend around the architectural and design patterns from `num5.doc`.
 
 ## What The Site Does
@@ -34,6 +43,17 @@ Password: 1234
 - Observer Pattern: analytics and recommendation consumers react independently to published events.
 - Factory Pattern: `src/factories` creates recommendation strategies and stream handlers from environment configuration.
 
+## Technology Stack
+
+- Frontend: HTML5, CSS3, JavaScript
+- Backend: Node.js HTTP server
+- Typed domain model: TypeScript interfaces in `src/types/domain.ts`
+- Streaming: local object-storage style media files served through `GET /api/stream/:id`
+- Persistence in this runnable version: JSON repository in `data/store.json`
+- Production metadata model: PostgreSQL schema in `database/postgres/schema.sql`
+- Production listening history model: Cassandra CQL schema in `database/cassandra/listening_history.cql`
+- Containerization: Docker and Docker Compose
+
 ## Project Structure
 
 ```text
@@ -44,6 +64,11 @@ prototype 1/
   server.js
   data/
     store.json
+  database/
+    cassandra/
+      listening_history.cql
+    postgres/
+      schema.sql
   media/
     song-1.wav
     ...

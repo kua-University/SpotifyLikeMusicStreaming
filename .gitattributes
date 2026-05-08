@@ -1,0 +1,5 @@
+*.sql linguist-detectable=true
+*.cql linguist-detectable=true
+*.ts linguist-detectable=true
+Dockerfile linguist-detectable=true
+docker-compose.yml linguist-detectable=true
