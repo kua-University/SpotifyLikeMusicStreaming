@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "check": "node --check server.js && node --check src/gateway/apiGateway.js && node --check src/container.js",
-    "generate-audio": "node scripts/generate-demo-audio.js"
+    "generate-audio": "node scripts/generate-demo-audio.js",
+    "smoke": "node scripts/smoke-test.js"
   },
   "engines": {
     "node": ">=18"

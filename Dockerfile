@@ -11,6 +11,7 @@ COPY src ./src
 COPY public ./public
 COPY data ./data
 COPY media ./media
+COPY scripts ./scripts
 COPY README.md ./
 
 EXPOSE 3000

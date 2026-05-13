@@ -8,6 +8,8 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Schema-4169e1?logo=postgresql&logoColor=white)
 ![Cassandra](https://img.shields.io/badge/Cassandra-Event%20History-1287b1?logo=apachecassandra&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ed?logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-2088ff?logo=githubactions&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Deployment-326ce5?logo=kubernetes&logoColor=white)
 
 This is a working full-stack music streaming site. It uses a browser frontend, a Node.js backend API, seekable local audio streams, and JSON persistence, while organizing the backend around the architectural and design patterns from `num5.doc`.
 
@@ -55,6 +57,8 @@ Password: 1234
 - Production metadata model: PostgreSQL schema in `database/postgres/schema.sql`
 - Production listening history model: Cassandra CQL schema in `database/cassandra/listening_history.cql`
 - Containerization: Docker and Docker Compose
+- CI/CD: GitHub Actions workflows in `.github/workflows`
+- Deployment: Kubernetes and Nginx manifests in `deploy`
 
 ## Project Structure
 
@@ -62,8 +66,13 @@ Password: 1234
 prototype 1/
   Dockerfile
   docker-compose.yml
+  docker-compose.prod.yml
   package.json
   server.js
+  .github/
+    workflows/
+      ci.yml
+      docker-publish.yml
   data/
     store.json
   database/
@@ -90,6 +99,12 @@ prototype 1/
     infrastructure/
     repositories/
     services/
+  deploy/
+    kubernetes/
+    nginx/
+  scripts/
+    generate-demo-audio.js
+    smoke-test.js
 ```
 
 If the generated demo audio files are missing, recreate them with:
@@ -138,6 +153,37 @@ docker compose down
 ```
 
 The compose file mounts `./data` into the container so site data changes persist on your machine.
+
+## DevOps And Deployment
+
+This repository includes:
+
+- `.github/workflows/ci.yml` for syntax checks, smoke tests, and Docker image build validation.
+- `.github/workflows/docker-publish.yml` for publishing a tagged Docker image to GitHub Container Registry.
+- `scripts/smoke-test.js` to verify health, BFF data, and audio stream range support.
+- `docker-compose.prod.yml` for a production-style local deployment.
+- `deploy/kubernetes` for namespace, config map, deployment, service, ingress, liveness probes, and readiness probes.
+- `deploy/nginx/default.conf` for reverse proxy deployment with audio range forwarding.
+- `.env.example` for runtime configuration.
+
+Run CI-style checks locally:
+
+```powershell
+npm run check
+npm run smoke
+```
+
+Production-style Compose:
+
+```powershell
+docker compose -f docker-compose.prod.yml up --build -d
+```
+
+Kubernetes:
+
+```powershell
+kubectl apply -k deploy/kubernetes
+```
 
 ## API Endpoints
 

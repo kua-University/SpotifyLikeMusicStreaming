@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: merkeb-music-config
+  namespace: merkeb-music
+data:
+  NODE_ENV: "production"
+  PORT: "3000"
+  STREAM_PROVIDER: "cdn"
+  RECOMMENDATION_STRATEGY: "genre"
